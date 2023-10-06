@@ -15,7 +15,7 @@
 - 超参的例子还有很多，他们都对网络的性能起着很大的作用，当然其中一些超参比其他参数重要我们可以以下图为参考标准来划分优先级，如学习率一般是最重要的。
 
 1. 超参数优化的方法：
-
+   
    随机搜索，网格搜索、**贝叶斯优化**等等
 
 ### Problems with SGD（stochastic gradient descent）
@@ -61,7 +61,6 @@ while True:
     dx = compute_gradient(x)
     vx = rho * vx +dx
     x += learning_rate * vx
-
 ```
 
 ### Nesterov Momentum
@@ -107,7 +106,7 @@ while True:
     x-= learning_rate * dx /(np.sqrt(grad_squared)+1e-7)
 ```
 
-### RMSProp  
+### RMSProp
 
 可以这么理解，沿着一个维度缓慢减速运动，和沿着一个维度缓慢加速运动，比AdaGrad多了后面这一个好处。
 ![1696512013628](image/TrainNeuralNetworks/1696512013628.png)
@@ -124,8 +123,8 @@ while True:
 ### Adam（almost）
 
 **有一点点像RMSProp，只不过最后的dx换成了first_moment,不仅仅考虑dx梯度，还考虑了动量**
-```python
 
+```python
 first_moment = 0
 second_moment = 0
 while True:
@@ -133,17 +132,22 @@ while True:
     first_moment = beta1 * first_moment +(1-beta1)*dx
     second_moment = beta2 * second_moment +(1-beta2)*dx *dx
     x -= learning_rate * first_moment /(np.sqrt(second_moment)+1e-7)
-
 ```
 
 ### Adam (完整形态)
+
 将first_moment和second_moment都除以一个(1-beta ** t) ，t是迭代次数，经过偏置校正后的第一矩估计向量和第二矩估计向量
+
 ![1696561005962](image/TrainNeuralNetworks/1696561005962.png)
-二阶矩可以理解成 转动惯量 
+
+二阶矩可以理解成 转动惯量
+
 ![1696560667044](image/TrainNeuralNetworks/1696560667044.png)
+
 $$
 \frac{1}{2} Jw^2
 $$
+
 还可以想象为，离当前位置越远的点，乘的衰减次数也就越多（影响越小）
 
 比如第一次迭代t=1，first_moment = (1-beta1)*dx，但是这样是有偏的，需要矫正除以一个(1-beta1),随着t的增加就开始不校正了。
@@ -161,7 +165,10 @@ for t in range(num_iterations):
     second_unbias = second_moment /(1-beta2 ** t)
     x -= learning_rate * first_unbias / (np.sqrt(second_unbias)+1e-7)
 ```
+
 ### 二阶优化器
+
 诸如L-BFGS
 
 ### DropOUT
+
